@@ -133,11 +133,26 @@ def evaluate_on_test(pipeline, X_test: pd.DataFrame, y_test: pd.Series, name: st
 
 
 def save_model(pipeline, name: str) -> Path:
+    """Save the fitted pipeline under two names:
+    - "{name}_pipeline.joblib": which model actually won, for your own
+      records/README, e.g. logreg_pipeline.joblib.
+    - "model.joblib": a fixed, algorithm-agnostic filename that src/app.py
+      always loads. This decouples the serving layer from which model
+      happens to win a given training run — if you rerun train.py later
+      and XGBoost wins instead of LogReg, app.py doesn't need to change
+      or know the difference.
+    """
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = MODELS_DIR / f"{name}_pipeline.joblib"
-    joblib.dump(pipeline, out_path)
-    print(f"Saved fitted pipeline to {out_path}")
-    return out_path
+
+    named_path = MODELS_DIR / f"{name}_pipeline.joblib"
+    joblib.dump(pipeline, named_path)
+    print(f"Saved fitted pipeline to {named_path}")
+
+    canonical_path = MODELS_DIR / "model.joblib"
+    joblib.dump(pipeline, canonical_path)
+    print(f"Saved fitted pipeline to {canonical_path} (canonical path used by src/app.py)")
+
+    return named_path
 
 
 def main() -> None:
