@@ -1,0 +1,21 @@
+# Production dependencies for src/app.py ONLY.
+#
+# Deliberately excludes packages requirements.txt has for other phases
+# of this project: xgboost (app.py loads the saved pipeline directly via
+# joblib and never imports src.pipeline, so the XGBoost class definition
+# is never needed to unpickle a LogReg-based pipeline), jupyter,
+# matplotlib, seaborn (EDA-only), pytest, httpx (test-only). Keeping
+# those out of the served image keeps it smaller and faster to build/
+# deploy, and keeps the image's dependency surface limited to what
+# actually runs in production.
+#
+# Versions pinned to match requirements.txt exactly, so the served
+# environment matches what was used for local development and training.
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.1
+joblib==1.4.2
+
+fastapi==0.111.1
+uvicorn[standard]==0.30.3
+pydantic==2.8.2

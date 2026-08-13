@@ -1,0 +1,17 @@
+# Keeps the Docker build context small — without this, Docker would
+# try to send the entire .venv/ (hundreds of MB of installed packages)
+# and the raw dataset to the Docker daemon on every build, which is
+# slow and pointless since the image installs its own dependencies
+# fresh from requirements-prod.txt.
+.venv/
+.git/
+.gitignore
+.pytest_cache/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+notebooks/
+tests/
+data/
+requirements.txt
+README.md

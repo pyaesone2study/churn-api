@@ -1,5 +1,6 @@
 .venv/
 data/
-models/
+models/*
+!models/model.joblib
 __pycache__/
 .ipynb_checkpoints/
